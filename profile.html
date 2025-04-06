@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - HeavyLoad Route Optimizer</title>
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Add these styles to your existing CSS or in the style tag */
+        body {
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+
+        .profile-section {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #007bff;
+        }
+
+        .profile-card {
+            border: 1px solid #e1e8ed;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logout-btn {
+            background-color: #ff4757;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff6b81;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+
+        .logout-btn i {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="landing.html" class="logo">
+                <i class="fas fa-truck"></i>
+                <span>HeavyLoad</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="landing.html#features">Features</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" class="cta-button active">Profile</a></li>
+                <li><button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <h1>Driver Profile</h1>
+                    <p class="profile-status"><i class="fas fa-check-circle"></i> Verified Driver</p>
+                    <p id="userInfo">Loading...</p>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <!-- Personal Information -->
+                <div class="profile-card">
+                    <h2><i class="fas fa-user"></i> Personal Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter your full name">
+                        </div>
+                        <div class="info-item">
+                            <label>Driver ID</label>
+                            <input type="text" placeholder="DRV-XXXXXX" readonly>
+                        </div>
+                        <div class="info-item">
+                            <label>Contact Number</label>
+                            <input type="tel" placeholder="Enter your contact number">
+                        </div>
+                        <div class="info-item">
+                            <label>Email</label>
+                            <input type="email" placeholder="Enter your email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div class="profile-card">
+                    <h2><i class="fas fa-truck"></i> Vehicle Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Vehicle Type</label>
+                            <select>
+                                <option value="">Select vehicle type</option>
+                                <option value="semi">Semi Truck</option>
+                                <option value="box">Box Truck</option>
+                                <option value="tanker">Tanker Truck</option>
+                                <option value="flatbed">Flatbed Truck</option>
+                            </select>
+                        </div>
+                        <div class="info-item">
+                            <label>Vehicle Number</label>
+                            <input type="text" placeholder="Enter vehicle number">
+                        </div>
+                        <div class="info-item">
+                            <label>Vehicle Height (ft)</label>
+                            <input type="number" min="0" step="0.1" placeholder="Enter height">
+                        </div>
+                        <div class="info-item">
+                            <label>Vehicle Weight (tons)</label>
+                            <input type="number" min="0" step="0.1" placeholder="Enter weight">
+                        </div>
+                        <div class="info-item">
+                            <label>Length (ft)</label>
+                            <input type="number" min="0" step="0.1" placeholder="Enter length">
+                        </div>
+                        <div class="info-item">
+                            <label>Width (ft)</label>
+                            <input type="number" min="0" step="0.1" placeholder="Enter width">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- License & Certifications -->
+                <div class="profile-card">
+                    <h2><i class="fas fa-certificate"></i> License & Certifications</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>License Number</label>
+                            <input type="text" placeholder="Enter license number">
+                        </div>
+                        <div class="info-item">
+                            <label>License Expiry</label>
+                            <input type="date">
+                        </div>
+                        <div class="info-item">
+                            <label>Hazmat Certified</label>
+                            <select>
+                                <option value="">Select option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <button class="save-button">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Check if user is logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName');
+            const isNewProfile = !localStorage.getItem('profileData');
+            
+            if (!userEmail) {
+                // If no user is logged in, redirect to login page
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            // Display user info
+            const userInfo = document.getElementById('userInfo');
+            userInfo.textContent = `Logged in as: ${userName || userEmail}`;
+
+            // Update page elements based on whether this is a new profile or edit
+            document.querySelector('h1').textContent = isNewProfile ? 'Create Driver Profile' : 'Edit Driver Profile';
+            document.querySelector('.save-button').innerHTML = `
+                <i class="fas fa-save"></i> ${isNewProfile ? 'Create Profile' : 'Save Changes'}
+            `;
+
+            // Add cancel button if editing profile
+            if (!isNewProfile) {
+                const saveButton = document.querySelector('.save-button');
+                const cancelButton = document.createElement('button');
+                cancelButton.className = 'cancel-button';
+                cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancel';
+                cancelButton.onclick = () => window.location.href = 'dashboard.html';
+                saveButton.parentNode.insertBefore(cancelButton, saveButton.nextSibling);
+
+                // Add cancel button styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    .cancel-button {
+                        background-color: #95a5a6;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        margin-left: 10px;
+                        transition: all 0.3s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .cancel-button:hover {
+                        background-color: #7f8c8d;
+                        transform: translateY(-2px);
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Load saved profile data if exists
+            loadProfileData();
+        });
+
+        function handleLogout() {
+            // Clear user data
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('profileData');
+            // Redirect to login page
+            window.location.href = 'signup.html';
+        }
+
+        // Function to save profile data
+        function saveProfileData() {
+            const profileData = {
+                // Personal Information
+                fullName: document.querySelector('input[placeholder="Enter your full name"]').value,
+                driverId: document.querySelector('input[placeholder="DRV-XXXXXX"]').value || generateDriverId(),
+                contactNumber: document.querySelector('input[placeholder="Enter your contact number"]').value,
+                email: document.querySelector('input[placeholder="Enter your email"]').value,
+
+                // Vehicle Information
+                vehicleType: document.querySelector('select').value,
+                vehicleNumber: document.querySelector('input[placeholder="Enter vehicle number"]').value,
+                vehicleHeight: document.querySelector('input[placeholder="Enter height"]').value,
+                vehicleWeight: document.querySelector('input[placeholder="Enter weight"]').value,
+                vehicleLength: document.querySelector('input[placeholder="Enter length"]').value,
+                vehicleWidth: document.querySelector('input[placeholder="Enter width"]').value,
+
+                // License Information
+                licenseNumber: document.querySelector('input[placeholder="Enter license number"]').value,
+                licenseExpiry: document.querySelector('input[type="date"]').value,
+                hazmatCertified: document.querySelector('select:last-of-type').value
+            };
+
+            // Validate required fields
+            const requiredFields = ['fullName', 'contactNumber', 'email', 'vehicleType', 'vehicleNumber'];
+            const missingFields = requiredFields.filter(field => !profileData[field]);
+            
+            if (missingFields.length > 0) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+
+            // Show success message and redirect
+            showNotification('Profile saved successfully! Redirecting to dashboard...', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        // Function to generate a unique driver ID
+        function generateDriverId() {
+            const timestamp = Date.now().toString(36).toUpperCase();
+            return `DRV-${timestamp.slice(-6)}`;
+        }
+
+        // Function to load saved profile data
+        function loadProfileData() {
+            const savedData = localStorage.getItem('profileData');
+            if (savedData) {
+                const profileData = JSON.parse(savedData);
+
+                // Fill in the form fields
+                document.querySelector('input[placeholder="Enter your full name"]').value = profileData.fullName || '';
+                document.querySelector('input[placeholder="DRV-XXXXXX"]').value = profileData.driverId || generateDriverId();
+                document.querySelector('input[placeholder="Enter your contact number"]').value = profileData.contactNumber || '';
+                document.querySelector('input[placeholder="Enter your email"]').value = profileData.email || '';
+
+                document.querySelector('select').value = profileData.vehicleType || '';
+                document.querySelector('input[placeholder="Enter vehicle number"]').value = profileData.vehicleNumber || '';
+                document.querySelector('input[placeholder="Enter height"]').value = profileData.vehicleHeight || '';
+                document.querySelector('input[placeholder="Enter weight"]').value = profileData.vehicleWeight || '';
+                document.querySelector('input[placeholder="Enter length"]').value = profileData.vehicleLength || '';
+                document.querySelector('input[placeholder="Enter width"]').value = profileData.vehicleWidth || '';
+
+                document.querySelector('input[placeholder="Enter license number"]').value = profileData.licenseNumber || '';
+                document.querySelector('input[type="date"]').value = profileData.licenseExpiry || '';
+                document.querySelector('select:last-of-type').value = profileData.hazmatCertified || '';
+            } else {
+                // For new profiles, pre-fill email from login
+                const userEmail = localStorage.getItem('userEmail');
+                if (userEmail) {
+                    document.querySelector('input[placeholder="Enter your email"]').value = userEmail;
+                }
+                // Generate new driver ID
+                document.querySelector('input[placeholder="DRV-XXXXXX"]').value = generateDriverId();
+            }
+        }
+
+        // Function to show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+
+            // Add styles for the notification
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '5px';
+            notification.style.backgroundColor = type === 'success' ? '#4CAF50' : '#f44336';
+            notification.style.color = 'white';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '10px';
+            notification.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '1000';
+            notification.style.animation = 'slideIn 0.3s ease';
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add save button click handler
+        document.querySelector('.save-button').addEventListener('click', saveProfileData);
+
+        // Add styles for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

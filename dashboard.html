@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeavyLoad Dashboard</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-link:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .profile-link i {
+            font-size: 16px;
+        }
+
+        .route-point-details {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #666;
+            display: flex;
+            gap: 15px;
+        }
+
+        .route-point-details span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .route-point-details i {
+            font-size: 0.9em;
+            color: #3498db;
+        }
+
+        .route-point {
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e1e8ed;
+        }
+
+        .route-point:last-child {
+            border-bottom: none;
+        }
+
+        .location-search {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .location-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .location-search input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .location-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .location-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .route-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .route-actions button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .calculate-route {
+            background-color: #2ecc71;
+            color: #ffffff;
+        }
+
+        .calculate-route:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+        }
+
+        .clear-route {
+            background-color: #e74c3c;
+            color: #ffffff;
+        }
+
+        .clear-route:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.2);
+        }
+
+        .route-actions button i {
+            font-size: 16px;
+        }
+
+        .location-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .suggestion-item i {
+            color: #3498db;
+            font-size: 14px;
+        }
+
+        .current-location-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .current-location-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .location-search {
+            position: relative;
+        }
+
+        .location-search input {
+            padding-right: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-truck"></i>
+                <span>HeavyLoad</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="landing.html"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="active"><i class="fas fa-map-marked-alt"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-route"></i> Routes</a>
+                <a href="#"><i class="fas fa-truck-moving"></i> Vehicles</a>
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search routes...">
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">0</span>
+                    </div>
+                    <a href="profile.html" class="profile-link">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Edit Profile</span>
+                    </a>
+                    <div class="user-profile">
+                        <img src="https://via.placeholder.com/32" alt="User Profile" id="user-avatar">
+                        <span id="user-name">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Map Section -->
+                <section class="map-container">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="traffic-toggle">
+                            <i class="fas fa-traffic-light"></i> Traffic
+                        </button>
+                        <button class="map-control-btn" id="weather-toggle">
+                            <i class="fas fa-cloud-sun"></i> Weather
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Route Information -->
+                <section class="route-info">
+                    <h2>Current Route</h2>
+                    <div class="route-points">
+                        <div class="route-point start">
+                            <div class="point-icon"><i class="fas fa-circle"></i></div>
+                            <div class="point-details">
+                                <div class="location-search">
+                                    <input type="text" id="start-search" placeholder="Enter start location">
+                                    <button onclick="getCurrentLocation('start')" class="current-location-btn">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </button>
+                                </div>
+                                <h3 id="start-point">Select a route...</h3>
+                                <div class="route-point-details">
+                                    <span><i class="far fa-clock"></i> Departure: <span id="departure-time">--:--</span></span>
+                                    <span><i class="fas fa-city"></i> City: <span id="start-city">--</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="route-point end">
+                            <div class="point-icon"><i class="fas fa-circle"></i></div>
+                            <div class="point-details">
+                                <div class="location-search">
+                                    <input type="text" id="end-search" placeholder="Enter destination">
+                                    <button onclick="getCurrentLocation('end')" class="current-location-btn">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </button>
+                                </div>
+                                <h3 id="end-point">Select a route...</h3>
+                                <div class="route-point-details">
+                                    <span><i class="far fa-clock"></i> Arrival: <span id="arrival-time">--:--</span></span>
+                                    <span><i class="fas fa-city"></i> City: <span id="end-city">--</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="route-actions">
+                            <button onclick="routeManager.calculateRoute()" class="calculate-route">
+                                <i class="fas fa-route"></i> Calculate Route
+                            </button>
+                            <button onclick="routeManager.clearRoute()" class="clear-route">
+                                <i class="fas fa-times"></i> Clear Route
+                            </button>
+                        </div>
+                    </div>
+                    <div class="route-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>ETA</h4>
+                                <p id="eta">--:--</p>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-road"></i>
+                            <div>
+                                <h4>Distance</h4>
+                                <p id="distance">-- km</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vehicle Information -->
+                <section class="vehicle-info">
+                    <h2>Vehicle Details</h2>
+                    <div class="vehicle-details">
+                        <div class="vehicle-stat">
+                            <i class="fas fa-weight"></i>
+                            <div>
+                                <h4>Weight</h4>
+                                <p id="vehicle-weight">-- kg</p>
+                            </div>
+                        </div>
+                        <div class="vehicle-stat">
+                            <i class="fas fa-arrows-alt-v"></i>
+                            <div>
+                                <h4>Height</h4>
+                                <p id="vehicle-height">-- m</p>
+                            </div>
+                        </div>
+                        <div class="vehicle-stat">
+                            <i class="fas fa-truck-loading"></i>
+                            <div>
+                                <h4>Type</h4>
+                                <p id="vehicle-type">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Panel -->
+                <section class="notifications-panel">
+                    <h2>Notifications</h2>
+                    <div class="notifications-list" id="notifications-list">
+                        <!-- Notifications will be dynamically added here -->
+                        <div class="empty-state">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No notifications yet</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Custom JS -->
+    <script src="dashboard.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+        vehicleManager.setVehicle({
+            weight: 12000,
+            height: 4.2,
+            type: 'Heavy Truck'
+        });
+
+        routeManager.setRoute({
+            coordinates: [[lat1, lng1], [lat2, lng2]],
+            startPoint: "123 Start Street",
+            endPoint: "456 End Avenue",
+            eta: "2h 30m",
+            distance: "150 km",
+            departureTime: "09:00",
+            arrivalTime: "11:30",
+            startCity: "New York",
+            endCity: "Boston",
+            maxWeight: 15000,
+            maxHeight: 4.5
+        });
+    </script>
+</body>
+</html> 
